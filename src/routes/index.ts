@@ -1,4 +1,4 @@
-import { execute as FindByFilename } from '@modules/services/findByFilename';
+import { execute as FindByFilename } from '../modules/services/findByFilename';
 import { Router } from 'express';
 import path from 'path';
 
