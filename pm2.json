@@ -1,0 +1,9 @@
+{
+    "apps": [
+      {
+        "name": "bkp-snx-downloader",
+        "script": "yarn build & yarn start",
+        "version": "1.0.0"
+      }
+    ]
+  }

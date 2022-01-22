@@ -93,10 +93,13 @@
           });
           $.ajax({
             type: "POST",
-            url: "http://179.182.46.106:3000/search",
+            url: "HOST_API/search",
             data: formData,
             success: function(data){
-              setTableData(data)
+              if(data.nodata){
+                alert('No data for ', data.search)
+              }else{
+              setTableData(data)}
             },
             error: function(res){
               if(res.status == 401){
