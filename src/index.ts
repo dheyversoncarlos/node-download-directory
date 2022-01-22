@@ -1,23 +1,20 @@
 import express from 'express';
 import * as dotenv from 'dotenv';
+import { routes } from '@routes';
+import cors from 'cors';
 
 dotenv.config();
 
 const app = express();
+
+const HOST = process.env.HOST || 'localhost';
+const PORT = Number(process.env.PORT) || 3333;
+
+app.use(cors());
 app.use(express.json());
+app.use('/files', express.static('src/files'));
+app.use(routes);
 
-interface RequestBody {
-  name: string;
-}
-
-app.post('/', (request, response) => {
-  const user = request.body as RequestBody;
-
-  return response.send({
-    message: `Hello ${user.name}`,
-  });
+app.listen(PORT, HOST, () => {
+  console.log(`Listening on http://${HOST}:${PORT}`);
 });
-
-app.listen(3000, () => console.log('Listening 3000'));
-
-// console.log('dir:', process.env.PATH_TO_SERVER_DOWNLOAD);

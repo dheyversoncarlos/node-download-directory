@@ -13,9 +13,10 @@
     },
     "plugins": [
         "@typescript-eslint",
-        "eslint-plugin-import-helpers",
         "prettier"
     ],
     "rules": {
+        "import/prefer-default-export": "off",
+        "import/no-unresolved": "off"
     }
 }
