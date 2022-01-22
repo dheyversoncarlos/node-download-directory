@@ -43,10 +43,13 @@
 
         <!-- Form -->
         <div class="row g-3">
-          <div class="col-md-5">
-            <h4>Input a filename to search</h4>
+          <div class="col-md-3">
+            <input type="text" class="form-control" id="inputUser" placeholder="username">
           </div>
-          <div class="col-md-4">
+          <div class="col-md-3">
+            <input type="password" class="form-control" id="inputToken" placeholder="token">
+          </div>
+          <div class="col-md-3">
             <input type="number" class="form-control" id="inputTxt" placeholder="filename">
           </div>
           <div class="col-md-3">
@@ -83,13 +86,22 @@
         function submitForm(form){
           $('#table-results-data').empty()
 
-          var formData = JSON.stringify({inputTxt: $("#inputTxt").val()});
+          var formData = JSON.stringify({
+            inputTxt: $("#inputTxt").val(),
+            inputUser: $("#inputUser").val(),
+            inputToken: $("#inputToken").val(),
+          });
           $.ajax({
             type: "POST",
-            url: "HOST_API/search",
+            url: "http://179.182.46.106:3000/search",
             data: formData,
             success: function(data){
               setTableData(data)
+            },
+            error: function(res){
+              if(res.status == 401){
+                alert(res.responseText)
+              }
             },
             dataType: "json",
             contentType : "application/json"
