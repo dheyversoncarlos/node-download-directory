@@ -93,7 +93,7 @@
           });
           $.ajax({
             type: "POST",
-            url: "HOST_API/search",
+            url: "http://localhost:3000/search",
             data: formData,
             success: function(data){
               if(data.nodata){

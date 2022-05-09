@@ -48,8 +48,7 @@ export const execute = async (filename: string) => {
       }
     }
     return Promise.resolve(filenames);
-  }else{
-
-    return Promise.resolve({nodata: true, search: filename});
   }
+
+  return Promise.resolve({ nodata: true, search: filename });
 };

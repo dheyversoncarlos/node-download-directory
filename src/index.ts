@@ -7,14 +7,13 @@ dotenv.config();
 
 const app = express();
 
-const HOST = process.env.HOST || 'localhost';
-const PORT = Number(process.env.PORT) || 3333;
+const PORT = Number(process.env.PORT) || 3000;
 
 app.use(cors());
 app.use(express.json());
 app.use('/files', express.static('src/files'));
 app.use(routes);
 
-app.listen(PORT, HOST, () => {
-  console.log(`Listening on http://${HOST}:${PORT}`);
+app.listen(PORT, () => {
+  console.log(`Listening on port ${PORT}`);
 });
