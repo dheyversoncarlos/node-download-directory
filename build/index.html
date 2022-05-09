@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <title>Node Download Directory</title>
+
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+    </style>
+
+    <!-- Custom styles for this template -->
+    <link href="css/cover" rel="stylesheet">
+  </head>
+  <body class="d-flex h-100 text-center text-white bg-dark">
+    
+    <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+
+      <main class="px-3">
+        <header class="mb-auto">
+          <div>
+            <h2>Node - Download Directory</h2>
+          </div>
+        </header>
+        <hr>
+
+        <!-- Form -->
+        <div class="row g-3">
+          <div class="col-md-3">
+            <input type="text" class="form-control" id="inputUser" placeholder="username">
+          </div>
+          <div class="col-md-3">
+            <input type="password" class="form-control" id="inputToken" placeholder="token">
+          </div>
+          <div class="col-md-3">
+            <input type="number" class="form-control" id="inputTxt" placeholder="filename">
+          </div>
+          <div class="col-md-3">
+            <button onclick="submitForm(this.form);" class="btn btn-primary mb-3">Search</button>
+          </div>
+        </div>
+        <hr>
+
+        <!-- Result -->
+        <br>
+        <h3 class="float-md-start mb-0">Results</h3>
+        <table class="table table-dark table-striped">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Filename</th>
+              <th scope="col">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="table-results-data"></tbody>
+        </table>
+
+      </main>
+
+      <footer class="mt-auto text-white-50">
+        <p>Power by <a href="https://dhcpsi.com.br/" class="text-white">DHCP'si Softwares Intelligent</a></p>
+      </footer>
+    </div>
+
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script>
+      // submitForm
+        function submitForm(form){
+          $('#table-results-data').empty()
+
+          var formData = JSON.stringify({
+            inputTxt: $("#inputTxt").val(),
+            inputUser: $("#inputUser").val(),
+            inputToken: $("#inputToken").val(),
+          });
+          $.ajax({
+            type: "POST",
+            url: "http://localhost:3000/search",
+            data: formData,
+            success: function(data){
+              if(data.nodata){
+                alert('No data for ', data.search)
+              }else{
+              setTableData(data)}
+            },
+            error: function(res){
+              if(res.status == 401){
+                alert(res.responseText)
+              }
+            },
+            dataType: "json",
+            contentType : "application/json"
+          });
+          
+          return false
+        } 
+
+      function setTableData(data){
+        var tbody = document.getElementById("table-results-data");
+
+        for(let i=0; i<data.length; i++){
+          let tr = document.createElement('tr');
+          tr.setAttribute("scope","row")
+
+          let index = document.createElement('td');
+          index.innerHTML = i+1;
+
+          let filename = document.createElement('td');
+          filename.innerHTML = data[i].filename;
+
+          let itemDownload = document.createElement('td');
+          let link = document.createElement('a');
+          link.setAttribute('href', data[i].url)
+          link.appendChild(document.createTextNode('Download'))
+          link.download = (data[i].url).substr(
+            (data[i].url).lastIndexOf('/') + 1);
+          itemDownload.appendChild(link)
+          
+          tr.appendChild(index)
+          tr.appendChild(filename);
+          tr.appendChild(itemDownload);
+
+          tbody.appendChild(tr)
+        }
+      }
+    </script>
+  </body>
+</html>
